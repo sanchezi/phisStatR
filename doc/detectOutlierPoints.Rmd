@@ -1,0 +1,107 @@
+---
+title: "Phenoarch platform - Cleaning procedure - Point level using locfit"
+author: "I.Sanchez"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: yes
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Phenoarch platform - Cleaning procedure - Point level using locfit}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!---
+Program  : detectOutlierPoints.Rmd
+Author   : I.Sanchez (MISTEA)
+Objective: a vignette for phisStatR library
+           require phisStatR library and flagPointLocfit() function
+           The user has to adapt to his own analysis.
+Creation : 13/04/2018
+Update   : 18/10/2019
+-->
+
+***
+# Objective 
+
+Detection of outlier points in time courses of an experiment in PhenoArch greenhouse. Use locfit smoothing function from the *locfit* library [2]. For each time course of a dataset, a locfit smoothin is applied, predictive confidence interval calculated (Y$\_$hat +/- threshold*Y$\_$hat$\_$se). Points are declared outlier if outside this confidence interval. the user choose the **threshold**.
+
+<div style="background-color:rgba(0, 255, 0,0.1); text-align:left; vertical-align: center; padding:10px 0;">
+flagPointLocfit: detection of outlier points in time courses
+
+* @param datain input dataframe of parameters
+* @param trait character, parameter of interest (ex: plantHeight)
+* @param xvar character, time variable (ex: thermalTime)
+* @param loopID character, ID on which to make the loop
+* @param locfit.h numeric, the constant component of the smoothing parameter
+* @param threshold numeric, threshold to detect on the prediction interval
+
+@return a list:
+
+* 1 prediction and detection of outlier on observed data
+* 2 prediction on regular abscissa data
+* 3 time courses with not enough point to be evaluated
+</div>
+
+```{r,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE}
+  library(lubridate)
+  library(dplyr)
+  library(locfit)
+  library(phisStatR)
+```
+
+# Import of data
+In this vignette, we use a toy data set of the *phisStatR* library (anonymized real data set). 
+```{r,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE}
+  mydata<-plant1
+  str(mydata)
+
+  mydata<-filter(mydata,!is.na(mydata$thermalTime))
+```
+
+# Outlier points detection
+I have chosen a smoothing parameter of 30 and a threshold of 8 to detect the outlier points.
+```{r,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE}
+  resu1<-flagPointLocfit(datain=mydata,trait="biovolume",xvar="thermalTime",loopID="Ref",
+                         locfit.h=30,threshold=8)
+```
+
+The output report can be over-sized (more than 1Mb), for size of sub-directories in packages purposes, I choose to represent only the first genotypes...
+
+```{r , echo = TRUE,message=FALSE, warning=FALSE,fig.height=10,fig.width=12}
+  myindex<-as.character(unique(resu1[[1]][,"Ref"]))
+  myindex<-myindex[1:30]
+  for (i in seq(1,length(myindex),by=15)){ 
+      myvec<-myindex[seq(i,i+14,1)]
+      plotFlagPoint(smoothin=resu1[[1]],loopID="Ref",myselect=myvec)
+  }
+```
+
+```{r , echo = TRUE,message=FALSE, warning=FALSE,fig.height=10,fig.width=12}
+  filter(resu1[[1]],outlier==1)
+```
+
+# Times courses with not enough points to be evaluated
+```{r,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE}
+  # Please change the Ref column by the one in your dataframe
+  if(is.null(resu1[[3]])){
+    print("All the time courses have more than 4 points.")
+  } else {
+    ggplot(data=resu1[[3]],aes(x=x,y=y)) +
+    geom_point() + facet_wrap(~Ref)
+  }
+```
+
+# Session info
+```{r session,echo=FALSE,message=FALSE, warning=FALSE}
+  sessionInfo()
+```
+
+# References
+1. R Development Core Team (2015). R: A language and environment for statistical computing. R Foundation for
+      Statistical Computing, Vienna, Austria. ISBN 3-900051-07-0, URL http://www.R-project.org.
+2. Catherine Loader (2013). locfit: Local Regression, Likelihood and Density Estimation.. R package version 1.5-9.1.
+  https://CRAN.R-project.org/package=locfit
+ 
+

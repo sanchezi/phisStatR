@@ -1,0 +1,124 @@
+---
+title: "Phenoarch platform - Cleaning procedure - Curve level - CARBayesST library"
+author: "I.Sanchez"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: yes
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Phenoarch platform - Cleaning procedure - Curve level - CARBayesST library}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!---
+Program  : CARBayesSTReport.Rmd
+Author   : I.Sanchez (MISTEA)
+Objective: a vignette for phisStatR library
+           Use of spatio-temporal bayesian anova modelling to detect outlier curve on each genotype-scenario
+           of an experiment, taking into account the lattice shape of the greenhouse
+           require phisStatR library and fitCARBayesST() function
+           The user has to adapt to his own analysis.
+Creation : 21/06/2017
+Update   : 18/10/2019
+-->
+
+***
+# Objective 
+
+Detection of outliers in time courses of an experiment in PhenoArch greenhouse. In this vignette, we use a toy data set of the *phisStatR* library (anonymized real data set). 
+
+The example is conducted on plantHeight parameter, we modelise the plantHeight taking into account the temporality (thermal time) and the spatiality (lattice structure) with a bayesian spatio-temporal ANOVA model [3].
+
+To detect outlier points, we retrieve the standardised residuals computed by the model and a point is an outlier if abs(res) > *threshold* (here threshold==4). the user will be able to change this threshold.
+
+We produced the output of the model as well as some graphics.
+
+# Import of data
+The input dataset must contain some predefined columns, have a look to the structure of *mydata*:
+```{r,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE}
+  library(lubridate)
+  library(dplyr)
+  library(phisStatR)
+
+  myReport<-substr(now(),1,10)
+
+  mydata<-plant1
+  str(mydata)
+```
+
+# CARBayesST library
+
+A bayesian approach to model these data where the spatio-temporal structure is modelled via sets of autocorrelated random effets. Conditional autoregressive (CAR) priors and spatio-temporal extensions thereof are typically assigned to these random effects to capture the autocorrelation, which are special cases of a Gaussian Markov random Filed (GMRF) [3].
+
+*ST.CARanova()* decomposes the spatio-temporal variation into 3 components:
+
+* an overall spatial effect common to all time periods
+* an overall temporal trend common to all spatial units
+* a set of independent space-time interactions
+
+we can add others factors (here the scenario (quali) ...)
+
+The spatio-temporal auto-correlation is modelled by a common set of spatial random effect and a common set of temporal random effects and both are modelled by the CAR prior (Conditional AutoRegressive).
+
+**Description of the results's table**:
+
+* **Median**: posterior median estimation
+* **2.5 and 97.5%**: 95% credible interval
+* **Geweke.diag**: the convergence diagnostic implemented in the **coda** package. takes form of a Z-score, so the convergence is suggested by the statistic being **within** the range (-1.96; 1.96)
+
+**Model fit criteria**
+
+* DIC: deviance information criterion
+* p.d: its corresponding estimated effective number of parameters
+* WAIC: the Watanabe-Akaike information criterion
+* p.w: its corresponding estimated number of effective parameters
+* LMPL: the log marginal predictive likelihood
+
+In model's comparison, the best fitting model is the one that minimises the DIC and WAIC but maximises the LMPL.
+
+**As the bayesian model can take a while, in this example, we initialise burnin=10 and n.sample=110 - not enough in real analysis!**
+
+```{r,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE}
+  # We suppress observations with missing data in time variable (here thermalTime)
+  mydata<-filter(mydata,!is.na(mydata$thermalTime))
+  model<-fitCARBayesST(datain=mydata,xvar="thermalTime",trait="plantHeight",k=2,
+          graphDist=TRUE,burnin=10,n.sample=110,
+          formulaModel=as.formula(plantHeight~scenario+genotypeAlias),typeModel="anova",verbose=TRUE)
+
+```
+
+```{r,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE}
+  # print the result of the bayesian modelling
+  printCARBayesST(modelin=model[[1]])
+```
+
+```{r , echo = TRUE,message=FALSE, warning=FALSE}
+  outtmp<-outlierCARBayesST(modelin=model[[1]],datain=model[[2]],threshold=4,trait="plantHeight")
+```
+
+## Outlier detection
+The output report can be over-sized (more than 1Mb), for size of sub-directories in packages purposes, I choose to represent only the first genotypes...
+```{r , echo = TRUE,message=FALSE, warning=FALSE,fig.height=10,fig.width=12}
+  mygeno<-as.character(unique(model[[2]][,"genotypeAlias"]))
+  mygeno<-mygeno[1:6]
+  for (i in seq(1,length(mygeno),by=15)){ 
+      myvec<-seq(i,i+14,1)
+      plotCARBayesST(datain=model[[2]],outlierin=outtmp,myselect=myvec,trait="plantHeight",xvar="thermalTime")
+  }
+  
+```
+
+# Session info
+```{r session,echo=FALSE,message=FALSE, warning=FALSE}
+  sessionInfo()
+```
+
+# References
+1. R Development Core Team (2015). R: A language and environment for statistical computing. R Foundation for
+      Statistical Computing, Vienna, Austria. ISBN 3-900051-07-0, URL http://www.R-project.org.
+2. Roger S. Bivand, Edzer Pebesma, Virgilio Gomez-Rubio, 2013. Applied spatial data analysis with R, Second edition. Springer, NY.
+  http://www.asdar-book.org/
+3. Duncan Lee, Alastair Rushworth and Gary Napier (2017). CARBayesST: Spatio-Temporal Generalised Linear Mixed Models for Areal Unit Data. R package version 2.5. https://CRAN.R-project.org/package=CARBayesST
+ 

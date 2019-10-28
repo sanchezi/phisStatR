@@ -1,0 +1,123 @@
+<!---
+Program  : gssAnalysisReport.Rmd
+Author   : I.Sanchez (MISTEA)
+Objective: a vignette for phisStatR library
+           Use of smoothing splines anova to detect outlier curve on each genotype-scenario
+           of an experiment with the Kullback-Leibler projection
+           require phisStatR library and fitgss() function
+           This program produces a pdf report and some export files (CSV format) is necessary. 
+           The user has to adapt to his own analysis.
+Creation : 09/12/2016
+Update   : 18/10/2019
+-->
+---
+title: "Phenoarch platform - Cleaning procedure - Curve level - gss package"
+author: "I.Sanchez"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: rmarkdown::pdf_document
+vignette: >
+  %\VignetteIndexEntry{Phenoarch platform - Cleaning procedure - Curve level - gss package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+***
+# Objective of cleaning procedure using smoothing splines anova
+Smoothing spline analysis of variance on each genotype-scenario of an experiment. Detection of outlier repetition if significant TT*Rep (thermal time by repetition) interaction using a Kullblack-Leibler projection (KL). I consider a genotype-scenario as outlier:
+
+* biovolume: if KL > 0.05
+* plantHeight: if KL > 0.05
+* leafArea: if KL > 0.05
+
+The input dataset must contain the following columns:
+
+* experimentAlias
+* genotypeAlias
+* scenario
+* repetition
+* thermalTime (for thermal time)
+* parameter of interest (biovolume, plantHeight etc...)
+
+The five first column names are standard names extracted from the web service.
+
+# Import of data
+```{r,echo=TRUE,message=FALSE, warning=FALSE}
+  library(ggplot2)
+  library(lubridate)
+  library(tidyr)
+  library(dplyr)
+  library(gss)
+  library(phisStatR)
+
+  myreport<-substr(now(),1,10)
+```
+
+```{r,echo=TRUE,message=FALSE, warning=FALSE}
+  # Import data, here is a dataset in the phisStatR package, You have to import your own dataset
+  # using a read.table() statement or a request to the web service
+  # You can add some datamanagement statements...
+  #------------------------------------------------------------------------
+  # Please, add the 'Ref' and 'Genosce' columns if don't exist. 
+  # 'Ref' is the concatenation of experimentAlias-Line-Position-scenario
+  # 'Genosce' is the concatenation of experimentAlias-genotypeAlias-scenario
+  #------------------------------------------------------------------------
+  
+  mydata<-unite(plant3,Genosce,experimentAlias,genotypeAlias,scenario,sep="-",remove=FALSE)
+  mydata<-arrange(mydata,Genosce)
+  
+```
+
+```{r oneprint,echo=FALSE,message=FALSE, warning=FALSE}
+  cat("-------------- plant3 dataset ---------------\n")  
+  printExperiment(datain=mydata,manip="manip3")
+```
+
+```{r algo,echo=TRUE,message=FALSE, warning=FALSE}
+  # For one parameter, for example biovolume
+  resbio<-fitGSS(datain=mydata,trait="biovolume",loopId="Genosce") 
+```
+
+# Curves by genotype-scenario
+
+## Biovolume
+```{r,echo=TRUE,message=FALSE, warning=FALSE}
+  outlierbio<-printGSS(object=resbio[[2]],threshold = 0.05)
+  klbio<-printGSS(object=resbio[[2]],threshold = NULL)
+  
+  cat("Detection of outlier curve with KL projection:\n")
+  print(outlierbio)
+  
+  #------------------------------------------------
+  # You can export these two datasets
+  # suppress the comments
+  #------------------------------------------------
+  #write.table(outlierbio,paste0(myreport,"outlier_gss_biovolume.csv"),row.names = FALSE,sep="\t")
+  #write.table(klbio,paste0(myreport,"KLprojection_gss_biovolume.csv"),row.names = FALSE,sep="\t")
+```
+
+I take a threshold of 0.05 for this example. We can take a more conservative threshold like 0.01 or 0.02 to detect more outlier curves...
+    
+```{r graph,echo=TRUE,message=FALSE, warning=FALSE,fig.width=12, fig.height=16}
+  # plot of the smoothing splines by genotype-scenario  
+  for(i in seq(1,length(unique(mydata[,"Genosce"])),by=12)){ 
+    myvec<-seq(i,i+11,1)
+    myvec<-myvec[myvec<=length(unique(mydata[,"Genosce"]))]
+    print(plotGSS(datain=mydata,modelin=resbio[[1]],trait="biovolume",myvec=myvec,lgrid=50))
+    cat("\n\n")
+  }
+
+```
+
+# Session info
+
+```{r session,echo=FALSE,message=FALSE, warning=FALSE}
+  sessionInfo()
+```
+
+# References
+1. R Development Core Team (2015). R: A language and environment for statistical computing. R Foundation for
+      Statistical Computing, Vienna, Austria. ISBN 3-900051-07-0, URL http://www.R-project.org.
+2. Chong Gu (2014). Smoothing Spline ANOVA Models: R Package gss. Journal of Statistical Software, 58(5), 1-25. URL
+  http://www.jstatsoft.org/v58/i05/.
+
+
