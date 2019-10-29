@@ -22,7 +22,8 @@ Imports:
     lubridate,
     gss,
     locfit,
-    phisWSClientR
+    phisWSClientR,
+    animation
 Suggests:
     roxygen2,
     knitr,

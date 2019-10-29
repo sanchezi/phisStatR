@@ -1,0 +1,102 @@
+---
+title: "Phenoarch platform - Create a video of a trait in the plateform"
+author: "I.Sanchez"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: yes
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Phenoarch platform - Create a video of a trait in the plateform}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!---
+Program  : videoImageGreenhouse.Rmd
+Author   : I.Sanchez (MISTEA)
+Objective: a vignette for phisStatR library
+           Use imageGreenhouse() to create a video of Biomass
+Creation : 29/10/2019
+Update   : 29/10/2019
+-->
+
+***
+# Objective 
+
+Create a video of a given trait recorded in the phenoArch platform. This tutorial will use the _imageGreenhouse()_ function and the __animation__ R package.
+
+https://cran.r-project.org/package=animation
+
+__SystemRequirements__: ImageMagick (http://imagemagick.org) or GraphicsMagick (http://www.graphicsmagick.org) or LyX (http://www.lyx.org) for _saveGIF()_; (PDF)LaTeX for saveLatex(); SWF Tools (http://swftools.org) for _saveSWF()_; FFmpeg (http://ffmpeg.org) or avconv (https://libav.org/avconv.html) for _saveVideo()_
+
+```{r libraries,echo=FALSE,message=FALSE, warning=FALSE,error=TRUE}
+  #-- Loading of librairies
+  library(tidyr)
+  library(dplyr)
+  library(phisStatR)
+  library(animation)
+```
+
+# Code for creating a video
+
+```{r,echo=TRUE,message=FALSE, warning=FALSE}
+  # import a temporal dataframe from phisStatR package:
+  data(plant1)
+
+  str(plant1)
+  
+  head(plant1)
+  
+  # Number of Days in the dataframe (in the experiment)
+  table(plant1[,"Day"])
+
+  plant1<-arrange(plant1,Day)
+    
+```
+
+The code below is not evaluated but just presented. Indeed, to create a video, R must save each temporal graphic in a repertory and then create the video using all the files. We just here show how to do this. Please try it with your own path and folder hierarchy.
+
+* Using the _saveVideo()_ function, we need to do a for loop on the vector of days of the experiment
+* For each day, the _imageGreenhouse()_ function is used to create a heatmap of the biovolume in the greenhouse with the typeI parameter set to "video".
+* each graphic is saved as a png file (ani.options) 
+* the video is created in the /output/ directory of our project (video.name line) as a GIF video. you can change the path...
+* you can set other options to ffmepg (other.opts) 
+* To incorporate the GIF in a Rmarkdown file, you have just to call the video in the chunk.
+
+
+```{r, echo=TRUE,eval=FALSE,message=FALSE, warning=FALSE}
+    #----------------------------------------------------
+    #heat map biovolume per Day and creation of a gif video
+    #----------------------------------------------------
+    vecDay<-na.omit(unique(plant1[,"Day"]))
+    
+    videoFileName<-"biovolume"
+    
+    saveVideo({
+      for (tmpday in 1:length(vecDay)){
+        imageGreenhouse(datain=filter(plant1,Day==vecDay[tmpday]),trait="biovolume",typeD=1,typeT=1,ylim=NULL,
+                        xcol="Line",ycol="Position",numrow=28,numcol=60,
+                        typeI="video")
+      } 
+      ani.options(interval = 1,ani.dev="png",ani.height=480)
+      },
+      video.name = paste0(thepath,"/output/",videoFileName,".gif"), 
+      other.opts = paste0("-y -r ",length(vecDay)+2," -i Rplot%d.png -dframes ",
+                          length(vecDay)+2," -r ",length(vecDay)+2)
+    )
+
+  # Call the video in a Rmarkdown file
+  #![](/my-path-to-project/output/humidity.gif)
+  
+```
+
+# Session info
+```{r session,echo=FALSE,message=FALSE, warning=FALSE}
+  sessionInfo()
+```
+
+# References
+1. R Development Core Team (2015). R: A language and environment for statistical computing. R Foundation for
+      Statistical Computing, Vienna, Austria. ISBN 3-900051-07-0, URL http://www.R-project.org.
+2. Yihui Xie (2013). animation: An R Package for Creating Animations and Demonstrating Statistical Methods. Journal of Statistical Software, 53(1), 1-27. URL http://www.jstatsoft.org/v53/i01/. 

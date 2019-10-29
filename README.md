@@ -3,8 +3,9 @@
 A set of statistical functions and rmarkdown scripts to analyze experiment in the phenoarch greenhouse - phis OpenSilex system information.
   
 * Spatial representation of a greenhouse or a lattice platform
+* Create a video with imageGreenhouse() function. see vignette _videoImageGreenhouse_
 * Detection of outliers in a set of points using the smoothing of a local regression (Loader 2013) and calculating a confidence interval of the prediction. see vignette _detectOutlierPoints_
-* Detection of outliers in a set of points using a bayesian spotio-temporal ANOVA model (Lee, 2018). see vignette _CARBayesSTReport_
+* Detection of outliers in a set of points using a bayesian spatio-temporal ANOVA model (Lee, 2018). see vignette _CARBayesSTReport_
 * Detection of outlier time courses using a nonparametric spline (Gu, 2014). see vignette _gssAnalysisReport_
 * Detection of outlier plant, defined as a biological replicate deviating from the overall distribution of plants on a
 multi-criteria basis, regardless of the quality of measurements. see vignette _detectOutlierCurves_
