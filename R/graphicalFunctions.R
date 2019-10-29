@@ -3,7 +3,7 @@
 # Objective: graphical functions for phenoarch experiment data analysis
 # Author: I.Sanchez
 # Creation: 27/07/2016
-# Update: 28/10/2019
+# Update: 29/10/2019
 #------------------------------------------------------------------
 
 #' @title a function for representing a trait in the phenoarch greenhouse
@@ -17,7 +17,10 @@
 #' @param trait character, a parameter to draw
 #' @param xcol character, name of the abscissa column (Line or x...)
 #' @param ycol character, name of the ordinate column (Position or y...)
-#' @param typeD numeric, type of dataframe (1==wide, 2==long)
+#' @param numrow numeric, number of rows in the greenhouse
+#' @param numcol numeric, number of columns in the greenhouse
+#' @param typeD numeric, type of dataframe (1==wide, 2==long). If typeD==2, the input dataset must contain
+#'              a 'Trait' column. 
 #' @param typeT numeric, type of the trait (1: quantitatif, 2: qualitatif), 1 is the default
 #' @param ylim if trait is quantitative, numeric vectors of length 2, giving the trait coordinates ranges.
 #'        default = NULL
@@ -36,24 +39,28 @@
 #' \donttest{
 #' # a video call
 #'  imageGreenhouse(datain=filter(plant2,Day==vecDay[Day]),trait="plantHeight",
-#'                  xcol="Line",ycol="Position",
+#'                  xcol="Line",ycol="Position",numrow=28,numcol=60,
 #'                  typeD=1,typeT=1,ylim=NULL,typeI="video")
 #' # an interactive plotly call
-#'  imageGreenhouse(datain=plant4, trait="Biomass24",xcol="Line",ycol="Position",
-#'                  typeD=1,typeT=1, ylim=NULL,typeI="plotly")
+#'  test<-imageGreenhouse(datain=plant4, trait="Biomass24",xcol="Line",ycol="Position",
+#'                  numrow=28,numcol=60,typeD=1,typeT=1, ylim=NULL,typeI="plotly")
+#'  plotly::ggplotly(test)
 #' # a classical ggplot2 call
 #'  imageGreenhouse(datain=plant4, trait="Biomass24",xcol="Line",ycol="Position",
-#'                 typeD=1,typeT=1, ylim=NULL,typeI="ggplot2")
+#'                 numrow=28,numcol=60,typeD=1,typeT=1, ylim=NULL,typeI="ggplot2")
 #' }
 #' @export
 imageGreenhouse<-function(datain,trait,xcol,ycol,
+                          numrow,numcol,
                           typeD,typeT=1,
                           ylim=NULL,
                           typeI="ggplot2",typeV=NULL){
 
   datain<-as.data.frame(datain)
 
+  #------------------------------------------
   # renames columns if necessary:
+  #------------------------------------------
   tmpname<-names(datain)
   tmpname[tmpname==xcol]<-"Line"
   tmpname[tmpname==ycol]<-"Position"
@@ -63,7 +70,10 @@ imageGreenhouse<-function(datain,trait,xcol,ycol,
   tmpname[grep("^Pot",tmpname,perl=TRUE)]<-"Pot"
   tmpname[grep("^reps",tmpname,perl=TRUE)]<-"Repsce"
   tmpname[grep("^Reps",tmpname,perl=TRUE)]<-"Repsce"
+  names(datain)<-tmpname
 
+  #------------------------------------------
+  
   if (typeD==1){ #wide format column==differents traits
     tmp.sp<-datain
   } else if (typeD==2){ # long format 1 column Trait, 1 column value
@@ -76,7 +86,7 @@ imageGreenhouse<-function(datain,trait,xcol,ycol,
   # ordering the dataset
   tmp.sp<-tmp.sp[order(tmp.sp[,"Position"],tmp.sp[,"Line"]),]
   # Reconstruction of the greenhouse, taking into account the missing data (important)!
-  mymat<-matrix(nrow=28,ncol=60)
+  mymat<-matrix(nrow=numrow,ncol=numcol)
   for (i in seq(1:nrow(mymat))){
     for (j in seq(1:ncol(mymat))){
       if (isTRUE(rownames(tmp.sp)[tmp.sp["Line"]==i & tmp.sp["Position"]==j][1] > 0))
@@ -87,6 +97,7 @@ imageGreenhouse<-function(datain,trait,xcol,ycol,
 
   melted.tmp <- reshape2::melt(mymat,varnames=c("Line","Position"))
   # specific title for video type
+  #-------
   if (typeI=="video") {
     if (is.null(typeV)){
       if (trait=="height") titlein<-paste("Growth Rate phenoarch greenhouse -",dayin,sep=" ")
@@ -99,6 +110,7 @@ imageGreenhouse<-function(datain,trait,xcol,ycol,
   }
 
   # for interactive plot, the ids of each plant appears with mouse scroll
+  #-------
   if (typeI=="plotly"){
     # if the column 'Manip' exists...
     if (sum(tmpname =="Manip") == 1) {
@@ -116,7 +128,6 @@ imageGreenhouse<-function(datain,trait,xcol,ycol,
                                    "Genotype:",melted.tmp[,"Genotype"],"<br>",
                                    "Rep sce:",melted.tmp[,"Repsce"]
                                     )
-
     }
   }
 
@@ -124,6 +135,7 @@ imageGreenhouse<-function(datain,trait,xcol,ycol,
   melted.tmp[,"Position"]<-factor(melted.tmp[,"Position"],levels = rev(sort(unique(melted.tmp[,"Position"]))))
 
   ### if quantitative variable
+  ###---------------------------
   if (typeT==1){
     if (typeI=="plotly"){
       g<-ggplot(data = melted.tmp, aes(x=Line, y=Position, fill=value,label=Ident))
@@ -133,7 +145,7 @@ imageGreenhouse<-function(datain,trait,xcol,ycol,
     g<-g + ggplot2::geom_tile() +
         labs(x="Line",y="Position",title=titlein) +
         theme(plot.title = element_text(size=18)) +
-        scale_y_discrete(labels=seq(60,1,-1)) +
+        scale_y_discrete(labels=seq(numcol,1,-1)) +
         if (is.null(ylim)){
             scale_fill_gradient2(low = "blue",high="red",mid="white",
                         midpoint=round(mean(tmp.sp[,trait],na.rm=TRUE),2),na.value="black")
@@ -147,6 +159,7 @@ imageGreenhouse<-function(datain,trait,xcol,ycol,
           #}
         }
   ### if qualitative variable
+  ###---------------------------
   } else if (typeT==2){
     if (typeI=="plotly"){
       g<-ggplot(data = melted.tmp, aes(x=Line, y=Position, fill=as.factor(value),label=Ident))
@@ -155,10 +168,11 @@ imageGreenhouse<-function(datain,trait,xcol,ycol,
     }
     g<-g + ggplot2::geom_tile() +
        labs(x="Line",y="Position",title=titlein) +
-       theme(plot.title = element_text(size=18)) + scale_y_discrete(labels=seq(60,1,-1)) +
+       theme(plot.title = element_text(size=18)) + scale_y_discrete(labels=seq(numcol,1,-1)) +
        scale_colour_brewer(name=trait,palette = "Set1",na.value="black")
   }
   # if interactive plot, the return must be a ggplot2 object (and not the print of the ggplot2 object...)
+  #---------------------------
   if (typeI=="plotly"){
     return(g)
   } else {
@@ -177,6 +191,8 @@ imageGreenhouse<-function(datain,trait,xcol,ycol,
 ##' @param myvec a numeric vector for facet graph
 ##' @param lgrid length of the regular grid for ssanova prediction
 ##' @return a ggplot2 graph object
+##' 
+##' @importFrom ggplot2 ggplot geom_line geom_ribbon geom_point facet_wrap
 ##'
 ##' @examples
 ##' # Not run
@@ -217,12 +233,14 @@ plotGSS<-function(datain,modelin,trait,myvec,lgrid){
   tmp1[,"repetition"]<-factor(tmp1[,"repetition"])
 
   ## plot
-  g <- ggplot2::ggplot(ngrid,ggplot2::aes(x = thermalTime,colour = repetition,group = repetition)) +
-      ggplot2::geom_line(ggplot2::aes(y = fm.fit),alpha = 1,colour = "grey20") +
-      ggplot2::geom_ribbon(ggplot2::aes(ymin = fm.fit-(1.96*fm.se), ymax = fm.fit+(1.96*fm.se),fill = repetition),
+  g <- ggplot(ngrid,ggplot2::aes(x = thermalTime,colour = repetition,group = repetition)) +
+          geom_line(ggplot2::aes(y = fm.fit),alpha = 1,colour = "grey20") +
+          geom_ribbon(ggplot2::aes(ymin = fm.fit-(1.96*fm.se), 
+                                   ymax = fm.fit+(1.96*fm.se),
+                                   fill = repetition),
                            alpha = 0.5,colour = "NA") +
-      ggplot2::geom_point(data=tmp1,ggplot2::aes_string(x = "thermalTime",y=trait,colour = "repetition")) +
-      ggplot2::facet_wrap(~ Genosce,ncol=3)
+          geom_point(data=tmp1,ggplot2::aes_string(x = "thermalTime",y=trait,colour = "repetition")) +
+          facet_wrap(~ Genosce,ncol=3)
   return(g)
 }
 

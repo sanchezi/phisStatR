@@ -4,7 +4,7 @@
 #            locfit smoothing and an interval of prediction
 # Author: I.Sanchez
 # Creation: 13/04/2018
-# Update  : 19/04/2018
+# Update  : 29/10/2019
 #-------------------------------------------------------------------------------
 
 #' flagPointLocfit
@@ -25,6 +25,8 @@
 #' }
 #' @export
 #'
+#' @importFrom dplyr select_ bind_rows
+#' 
 #' @examples
 #' \donttest{
 #' # Example
@@ -59,7 +61,7 @@ flagPointLocfit<-function(datain,trait,xvar,loopID,locfit.h,threshold){
 
     ### lissage et intervalles de prediction
     if (length(na.omit(y)) <=4){
-      tabNotEnoughPoint<-rbind_rows(tabNotEnoughPoint,
+      tabNotEnoughPoint<-bind_rows(tabNotEnoughPoint,
                                     select_(datain[datain[,loopID]==i,],loopID,xvar,trait))
       names(tabNotEnoughPoint)<-c("Ref","x","y")
       next

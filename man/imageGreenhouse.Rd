@@ -4,8 +4,8 @@
 \alias{imageGreenhouse}
 \title{a function for representing a trait in the phenoarch greenhouse}
 \usage{
-imageGreenhouse(datain, trait, xcol, ycol, typeD, typeT = 1,
-  ylim = NULL, typeI = "ggplot2", typeV = NULL)
+imageGreenhouse(datain, trait, xcol, ycol, numrow, numcol, typeD,
+  typeT = 1, ylim = NULL, typeI = "ggplot2", typeV = NULL)
 }
 \arguments{
 \item{datain}{a dataframe to explore}
@@ -16,7 +16,12 @@ imageGreenhouse(datain, trait, xcol, ycol, typeD, typeT = 1,
 
 \item{ycol}{character, name of the ordinate column (Position or y...)}
 
-\item{typeD}{numeric, type of dataframe (1==wide, 2==long)}
+\item{numrow}{numeric, number of rows in the greenhouse}
+
+\item{numcol}{numeric, number of columns in the greenhouse}
+
+\item{typeD}{numeric, type of dataframe (1==wide, 2==long). If typeD==2, the input dataset must contain
+a 'Trait' column.}
 
 \item{typeT}{numeric, type of the trait (1: quantitatif, 2: qualitatif), 1 is the default}
 
@@ -47,13 +52,14 @@ For plotly type graphic, the data frame in input must also contain id of plants
 \donttest{
 # a video call
  imageGreenhouse(datain=filter(plant2,Day==vecDay[Day]),trait="plantHeight",
-                 xcol="Line",ycol="Position",
+                 xcol="Line",ycol="Position",numrow=28,numcol=60,
                  typeD=1,typeT=1,ylim=NULL,typeI="video")
 # an interactive plotly call
- imageGreenhouse(datain=plant4, trait="Biomass24",xcol="Line",ycol="Position",
-                 typeD=1,typeT=1, ylim=NULL,typeI="plotly")
+ test<-imageGreenhouse(datain=plant4, trait="Biomass24",xcol="Line",ycol="Position",
+                 numrow=28,numcol=60,typeD=1,typeT=1, ylim=NULL,typeI="plotly")
+ plotly::ggplotly(test)
 # a classical ggplot2 call
  imageGreenhouse(datain=plant4, trait="Biomass24",xcol="Line",ycol="Position",
-                typeD=1,typeT=1, ylim=NULL,typeI="ggplot2")
+                numrow=28,numcol=60,typeD=1,typeT=1, ylim=NULL,typeI="ggplot2")
 }
 }

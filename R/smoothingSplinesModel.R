@@ -4,7 +4,7 @@
 #            require gss package
 # Author: I.Sanchez
 # Creation: 28/07/2016
-# Update: 22/03/2018
+# Update: 29/10/2019
 #-------------------------------------------------------------------------------
 
 ##' a function to model curves using smoothing splines anova using \code{gss} library
@@ -15,6 +15,14 @@
 ##' @param loopId a column name that contains ident of Genotype-Scenario
 #' @details the input dataframe must contain the following columns: the trait to model,
 #' the ident of Genotype-Scenario, thermalTime, repetition columns
+#' 
+#' @details Each time course is modelled by a nonparametric smoothing spline. This is a piecewise cubic polynomial
+#' (Eubank, 1999). Then a “functional” ANOVA decomposition (Gu, 2014) of all the fitted splines for each
+#' genotype by environmental treatment combination is realised, by taking into account the replicate effect and
+#' a temporal functional effect. The smoothing spline fitting and the functional ANOVA decompositions can be
+#' performed with the ‘gss’ R package. The outlier curves are identified with a Kullback-Lleiber distance higher
+#' than 0.05 (arbitrary threshold), see (Gu, 2014). Final identification of outlier is done by an operator over
+#' genotypes when the test is significant.
 #'
 ##' @return a list containing 2 objects
 ##' \describe{
