@@ -13,17 +13,15 @@
 ##' @param datain input dataframe
 ##' @param trait character, trait of interest to model (example biovolume, PH ...)
 ##' @param loopId a column name that contains ident of Genotype-Scenario
-#' @details the input dataframe must contain the following columns: the trait to model,
-#' the ident of Genotype-Scenario, thermalTime, repetition columns
-#' 
-#' @details Each time course is modelled by a nonparametric smoothing spline. This is a piecewise cubic polynomial
-#' (Eubank, 1999). Then a “functional” ANOVA decomposition (Gu, 2014) of all the fitted splines for each
-#' genotype by environmental treatment combination is realised, by taking into account the replicate effect and
-#' a temporal functional effect. The smoothing spline fitting and the functional ANOVA decompositions can be
-#' performed with the ‘gss’ R package. The outlier curves are identified with a Kullback-Lleiber distance higher
-#' than 0.05 (arbitrary threshold), see (Gu, 2014). Final identification of outlier is done by an operator over
-#' genotypes when the test is significant.
-#'
+##' @details the input dataframe must contain the following columns: the trait to model,
+##' the ident of Genotype-Scenario, thermalTime, repetition columns
+##' 
+##' @details Each time course is modelled by a nonparametric smoothing spline. This is a piecewise cubic polynomial
+##' (Eubank, 1999). Then a functional ANOVA decomposition (Gu, 2014) of all the fitted splines for each
+##' genotype by environmental treatment combination is realised, by taking into account the replicate effect and
+##' a temporal functional effect. The smoothing spline fitting and the functional ANOVA decompositions are be
+##' performed with the gss R package. 
+##'
 ##' @return a list containing 2 objects
 ##' \describe{
 ##' \item{}{a list of each output of \code{\link[=ssanova]{ssanova}}}
@@ -31,6 +29,7 @@
 ##' }
 ##'
 ##' @seealso \code{\link[=project.ssanova]{project.ssanova}}, \code{\link[=ssanova]{ssanova}}
+##' 
 ##' @examples
 ##' \donttest{
 ##'  fm1<-fitGSS(datain=plant1,trait="biovolume")
@@ -60,7 +59,9 @@ fitGSS<-function(datain,trait,loopId){
 #'
 #' @seealso \code{\link[=ssanova]{ssanova}}
 #' @details the input object is the 2nd element of a fitGSS result, a dataframe with the Kullback-Leibler projection
-#'          colnames of this dataframe are Genosce, ratio, kl, check
+#'          colnames of this dataframe are Genosce, ratio, kl, check. The outlier curves are identified with the Kullback-Lleiber 
+#'          distance higher than a given threshold, see (Gu, 2014). Final identification of outlier is done by an operator over
+#'          genotypes when the test is significant.
 #' @return a description
 #'
 #' @examples

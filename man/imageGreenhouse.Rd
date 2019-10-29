@@ -57,7 +57,7 @@ For plotly type graphic, the data frame in input must also contain id of plants
 # an interactive plotly call
  test<-imageGreenhouse(datain=plant4, trait="Biomass24",xcol="Line",ycol="Position",
                  numrow=28,numcol=60,typeD=1,typeT=1, ylim=NULL,typeI="plotly")
- plotly::ggplotly(test)
+# test is a ggplot2 object, you have to render it with: plotly::ggplotly(test)
 # a classical ggplot2 call
  imageGreenhouse(datain=plant4, trait="Biomass24",xcol="Line",ycol="Position",
                 numrow=28,numcol=60,typeD=1,typeT=1, ylim=NULL,typeI="ggplot2")

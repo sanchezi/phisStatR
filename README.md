@@ -3,8 +3,8 @@
 A set of statistical functions and rmarkdown scripts to analyze experiment in the phenoarch greenhouse - phis OpenSilex system information.
   
 * Spatial representation of a greenhouse or a lattice platform
-* Detection of outliers in a set of points using the smoothing of a local regression and calculating a confidence interval of the prediction. see vignette _detectOutlierPoints_
-* Detection of outliers in a set of points using a bayesian spotio-temporal ANOVA model (Lee, 2013). see vignette _CARBayesSTReport_
+* Detection of outliers in a set of points using the smoothing of a local regression (Loader 2013) and calculating a confidence interval of the prediction. see vignette _detectOutlierPoints_
+* Detection of outliers in a set of points using a bayesian spotio-temporal ANOVA model (Lee, 2018). see vignette _CARBayesSTReport_
 * Detection of outlier time courses using a nonparametric spline (Gu, 2014). see vignette _gssAnalysisReport_
 * Detection of outlier plant, defined as a biological replicate deviating from the overall distribution of plants on a
 multi-criteria basis, regardless of the quality of measurements. see vignette _detectOutlierCurves_
@@ -55,5 +55,5 @@ URL https://doi.org/10.1016/j.spasta.2017.10.003
 2. Gu, C. (2013), Smoothing Spline ANOVA Models (2nd Ed). New York: Springer-Verlag.
 3. Gu, C. (2014), Smoothing Spline ANOVA Models: R Package gss. Journal of Statistical Software, 58(5),
 1-25. URL http://www.jstatsoft.org/v58/i05/.
-4. Duncan Lee (2013). CARBayes: An R Package for Bayesian Spatial Modeling with Conditional Autoregressive Priors. Journal of
-  Statistical Software, 55(13), 1-24. URL http://www.jstatsoft.org/v55/i13/.
+4. Lee D, Rushworth A, Napier G (2018). “Spatio-Temporal Areal Unit Modeling in R with Conditional Autoregressive Priors Using the CARBayesST Package.” Journal of Statistical Software, 84(9), 1–39. doi: 10.18637/jss.v084.i09.
+5. Catherine Loader (2013). locfit: Local Regression, Likelihood and Density Estimation.. R package version 1.5-9.1. https://CRAN.R-project.org/package=locfit

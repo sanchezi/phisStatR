@@ -4,7 +4,7 @@
 #            require SpATS package
 # Author: I.Sanchez
 # Creation: 04/05/2018
-# Update: 04/05/2018
+# Update: 29/10/2019
 #-------------------------------------------------------------------------------
 
 #' fitSpATS
@@ -37,6 +37,10 @@
 fitSpATS<-function(datain,trait,genotypeId,rowId,colId,typeModel="anova",genotype.as.random=FALSE,nseg=c(14,30),verbose){
   datain$R<-as.factor(datain[,rowId])
   datain$C<-as.factor(datain[,colId])
+  
+  # I need to have these column names in the model
+  colnames(datain)[which(colnames(datain)==rowId)] <-"Line"
+  colnames(datain)[which(colnames(datain)==colId)] <-"Position"
 
   # spatial P-Spline ANOVA modelling
   if (typeModel=="anova"){

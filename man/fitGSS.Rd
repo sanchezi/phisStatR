@@ -27,6 +27,12 @@ splines anova
 \details{
 the input dataframe must contain the following columns: the trait to model,
 the ident of Genotype-Scenario, thermalTime, repetition columns
+
+Each time course is modelled by a nonparametric smoothing spline. This is a piecewise cubic polynomial
+(Eubank, 1999). Then a functional ANOVA decomposition (Gu, 2014) of all the fitted splines for each
+genotype by environmental treatment combination is realised, by taking into account the replicate effect and
+a temporal functional effect. The smoothing spline fitting and the functional ANOVA decompositions are be
+performed with the gss R package.
 }
 \examples{
 \donttest{
