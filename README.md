@@ -4,6 +4,7 @@ A set of statistical functions and rmarkdown scripts to analyze experiment in th
   
 * Spatial representation of a greenhouse or a lattice platform
 * Detection of outliers in a set of points using the smoothing of a local regression and calculating a confidence interval of the prediction. see vignette _detectOutlierPoints_
+* Detection of outliers in a set of points using a bayesian spotio-temporal ANOVA model (Lee, 2013). see vignette _CARBayesSTReport_
 * Detection of outlier time courses using a nonparametric spline (Gu, 2014). see vignette _gssAnalysisReport_
 * Detection of outlier plant, defined as a biological replicate deviating from the overall distribution of plants on a
 multi-criteria basis, regardless of the quality of measurements. see vignette _detectOutlierCurves_
@@ -45,3 +46,14 @@ citation("phisStatR")
 ```
 
 See also citation() for citing R itself.
+
+# References
+
+1. Maria Xose Rodriguez-Alvarez, Martin P. Boer, Fred A. van Eeuwijk, Paul H.C. Eilers (2018). Correcting
+for spatial heterogeneity in plant breeding experiments with P-splines. Spatial Statistics 23 52 - 71
+URL https://doi.org/10.1016/j.spasta.2017.10.003
+2. Gu, C. (2013), Smoothing Spline ANOVA Models (2nd Ed). New York: Springer-Verlag.
+3. Gu, C. (2014), Smoothing Spline ANOVA Models: R Package gss. Journal of Statistical Software, 58(5),
+1-25. URL http://www.jstatsoft.org/v58/i05/.
+4. Duncan Lee (2013). CARBayes: An R Package for Bayesian Spatial Modeling with Conditional Autoregressive Priors. Journal of
+  Statistical Software, 55(13), 1-24. URL http://www.jstatsoft.org/v55/i13/.
