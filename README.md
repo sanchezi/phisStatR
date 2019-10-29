@@ -1,7 +1,7 @@
 # phisStatR
 
 A set of statistical functions and rmarkdown scripts to analyze experiment in the phenoarch greenhouse - phis OpenSilex system information.
-
+  
 * Spatial representation of a greenhouse or a lattice platform
 * Detection of outliers in a set of points using the smoothing of a local regression and calculating a confidence interval of the prediction. see vignette _detectOutlierPoints_
 * Detection of outlier time courses using a nonparametric spline (Gu, 2014). see vignette _gssAnalysisReport_

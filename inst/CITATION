@@ -1,0 +1,32 @@
+bibentry(bibtype = "Article",
+  title        = "To clean or not to clean phenotypic datasets for outlier plants in genetic analyses?",
+  author       = c(person(given = "S.",
+                          family = "Alvarez Prado"),
+                   person(given = "I.",
+                          family = "Sanchez"),
+                   person(given = "L.",
+                          family = "Cabrera Bosquet"),
+                   person(given = "A.",
+                          family = "Grau"),
+                   person(given = "C.",
+                          family = "Welcker"),
+                   person(given = "F.",
+                          family = "Tardieu"),
+                   person(given = "N.",
+                          family = "Hilgert")
+                          ),
+  journal      = "Journal of Experimental Botany",
+  year         = "2019",
+  volume       = "70",
+  number       = "15",
+  pages        = "3693-3698",
+  doi          = "10.1093/jxb/erz191",
+
+  header       = "To cite bliss in publications use:",
+  textVersion  =
+  paste("Alvarez Prado, S., Sanchez, I., Cabrera Bosquet, L., Grau, A., Welcker, C., Tardieu, F., Hilgert, N. (2019).",
+        "To clean or not to clean phenotypic datasets for outlier plants in genetic analyses?",
+        "Journal of Experimental Botany",
+        "70 (15), 3693-3698.",
+        "10.1093/jxb/erz191.")
+)
