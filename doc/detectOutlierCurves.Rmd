@@ -32,7 +32,7 @@ Update   : 18/10/2019
   library(ggplot2)
 ```
 
-This vignette deals with the detection of outlier plants in a lattice experiment using a spatial model using splines (**SpATS** library). Here the following steps of this procedure developed for Maize experiment but easily adaptable to others species:
+This vignette deals with the detection of outlier plants in a lattice experiment using a spatial model using splines (**SpATS** library) [3]. Here the following steps of this procedure developed for Maize experiment but easily adaptable to others species:
 
 * From a temporal dataset designed as __plant1__ with biomass (or biovolume) and plant height phenotypes. Extract predictions of these two phenotypes at a specific time point (for example just before the treatment) and create a dataset designed as __plant4__. Here, we will use the biomass and plant height predicted at 24 days et 20°C.
 * From a temporal dataset of count of number of leaves, extract the phyllocron (slope of linear regression for each plant)
@@ -257,3 +257,4 @@ The user can check the outlier curves detected by this procedure. We use *plant1
       Statistical Computing, Vienna, Austria. ISBN 3-900051-07-0, URL http://www.R-project.org.
 2. Maria Xose Rodriguez-Alvarez, Martin P. Boer, Fred A. van Eeuwijk, Paul H.C. Eilers (2017). Correcting for spatial heterogeneity
   in plant breeding experiments with P-splines. Spatial Statistics URL https://doi.org/10.1016/j.spasta.2017.10.003
+3. Alvarez Prado, S., Sanchez, I., Cabrera Bosquet, L., Grau, A., Welcker, C., Tardieu, F., Hilgert, N. (2019). To clean or not to clean phenotypic datasets for outlier plants in genetic analyses?. Journal of Experimental Botany, 70 (15), 3693-3698. , DOI : 10.1093/jxb/erz191 https://prodinra.inra.fr/record/481355
