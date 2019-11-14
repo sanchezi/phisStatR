@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Phenoarch platform - Cleaning procedure - Curve level - gss package</h1>
 <h4 class="author">I.Sanchez</h4>
-<h4 class="date">novembre 12, 2019</h4>
+<h4 class="date">novembre 14, 2019</h4>
 
 </div>
 
@@ -412,6 +412,24 @@ Update   : 18/10/2019
   library(phisStatR)
 
   myreport&lt;-substr(now(),1,10)</code></pre>
+<pre class="r"><code>  data(plant3)
+  cat(&quot;-------------- plant3 dataset ---------------\n&quot;)  </code></pre>
+<pre><code>## -------------- plant3 dataset ---------------</code></pre>
+<pre class="r"><code>  printExperiment(datain=plant3)</code></pre>
+<pre><code>##  [1] &quot;Ref&quot;         &quot;experiment&quot;  &quot;Day&quot;         &quot;Pot&quot;         &quot;scenario&quot;   
+##  [6] &quot;Genotype&quot;    &quot;repetition&quot;  &quot;Line&quot;        &quot;Position&quot;    &quot;thermalTime&quot;
+## [11] &quot;plantHeight&quot; &quot;leafArea&quot;    &quot;biovolume&quot;   &quot;Repsce&quot;     
+## Experiment: manip3 
+## Genotypes: 10 
+##  [1] &quot;A3_H&quot;     &quot;A310_H&quot;   &quot;11430_H&quot;  &quot;A554_H&quot;   &quot;A374_H&quot;   &quot;A347_H&quot;  
+##  [7] &quot;B100_H&quot;   &quot;A375_H&quot;   &quot;AS5707_H&quot; &quot;A347&quot;    
+## Scenario: 2 
+## [1] &quot;WW&quot; &quot;WD&quot;
+## Repetition-scenario: 6 
+## [1] &quot;1-WW&quot; &quot;2-WW&quot; &quot;3-WW&quot; &quot;1-WD&quot; &quot;2-WD&quot; &quot;3-WD&quot;
+## Pots (number of plants): 60 
+## Line: 25 
+## Position: 42</code></pre>
 <pre class="r"><code>  # Import data, here is a dataset in the phisStatR package, You have to import your own dataset
   # using a read.table() statement or a request to the web service
   # You can add some datamanagement statements...
@@ -423,15 +441,6 @@ Update   : 18/10/2019
   
   mydata&lt;-unite(plant3,Genosce,experimentAlias,genotypeAlias,scenario,sep=&quot;-&quot;,remove=FALSE)
   mydata&lt;-arrange(mydata,Genosce)</code></pre>
-<pre><code>## -------------- plant3 dataset ---------------</code></pre>
-<pre><code>## Genotypes: 10 
-##  [1] &quot;11430_H&quot;  &quot;A310_H&quot;   &quot;A347_H&quot;   &quot;A347&quot;     &quot;A374_H&quot;   &quot;A375_H&quot;  
-##  [7] &quot;A3_H&quot;     &quot;A554_H&quot;   &quot;AS5707_H&quot; &quot;B100_H&quot;  
-## Scenario: 2 
-## [1] &quot;WD&quot; &quot;WW&quot;
-## Repsce: 6 
-## [1] &quot;1_WD&quot; &quot;2_WD&quot; &quot;3_WD&quot; &quot;1_WW&quot; &quot;2_WW&quot; &quot;3_WW&quot;
-## Ref (number of plants): 60</code></pre>
 <pre class="r"><code>  # For one parameter, for example biovolume
   resbio&lt;-fitGSS(datain=mydata,trait=&quot;biovolume&quot;,loopId=&quot;Genosce&quot;) </code></pre>
 </div>
@@ -493,34 +502,34 @@ Update   : 18/10/2019
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] colorspace_1.4-1   deldir_0.1-23      ellipsis_0.3.0    
-##   [4] class_7.3-15       leaflet_2.0.2      rgdal_1.4-6       
+##   [4] class_7.3-15       leaflet_2.0.2      rgdal_1.4-7       
 ##   [7] evd_2.3-3          rprojroot_1.3-2    fs_1.3.1          
 ##  [10] rstudioapi_0.10    remotes_2.1.0      splines_3.6.1     
-##  [13] knitr_1.25         pkgload_1.0.2      zeallot_0.1.0     
-##  [16] spam_2.3-0.2       shiny_1.4.0        compiler_3.6.1    
+##  [13] knitr_1.26         pkgload_1.0.2      zeallot_0.1.0     
+##  [16] spam_2.4-0         shiny_1.4.0        compiler_3.6.1    
 ##  [19] backports_1.1.5    assertthat_0.2.1   Matrix_1.2-17     
 ##  [22] fastmap_1.0.1      lazyeval_0.2.2     cli_1.1.0         
 ##  [25] later_1.0.0        htmltools_0.4.0    prettyunits_1.0.2 
 ##  [28] tools_3.6.1        dotCall64_1.0-0    coda_0.19-3       
 ##  [31] gtable_0.3.0       glue_1.3.1         CARBayesdata_2.1  
-##  [34] maps_3.3.0         gmodels_2.18.1     Rcpp_1.0.2        
+##  [34] maps_3.3.0         gmodels_2.18.1     Rcpp_1.0.3        
 ##  [37] vctrs_0.2.0        spdep_1.1-3        gdata_2.18.0      
-##  [40] nlme_3.1-140       crosstalk_1.0.0    xfun_0.10         
-##  [43] stringr_1.4.0      ps_1.3.0           testthat_2.2.1    
+##  [40] nlme_3.1-140       crosstalk_1.0.0    xfun_0.11         
+##  [43] stringr_1.4.0      ps_1.3.0           testthat_2.3.0    
 ##  [46] mime_0.7           lifecycle_0.1.0    gtools_3.8.1      
 ##  [49] devtools_2.1.0     LearnBayes_2.15.1  MASS_7.3-51.4     
 ##  [52] scales_1.0.0       promises_1.1.0     expm_0.999-4      
-##  [55] fields_9.9         yaml_2.2.0         memoise_1.1.0     
-##  [58] truncdist_1.0-2    stringi_1.4.3      SpATS_1.0-9       
+##  [55] fields_10.0        yaml_2.2.0         memoise_1.1.0     
+##  [58] truncdist_1.0-2    stringi_1.4.3      SpATS_1.0-10      
 ##  [61] desc_1.2.0         e1071_1.7-2        boot_1.3-23       
-##  [64] pkgbuild_1.0.3     truncnorm_1.0-8    spData_0.3.2      
+##  [64] pkgbuild_1.0.6     truncnorm_1.0-8    spData_0.3.2      
 ##  [67] rlang_0.4.1        pkgconfig_2.0.3    matrixStats_0.55.0
 ##  [70] evaluate_0.14      lattice_0.20-38    purrr_0.3.3       
 ##  [73] sf_0.8-0           htmlwidgets_1.5.1  labeling_0.3      
 ##  [76] processx_3.4.1     tidyselect_0.2.5   magrittr_1.5      
-##  [79] R6_2.4.0           DBI_1.0.0          pillar_1.4.2      
+##  [79] R6_2.4.1           DBI_1.0.0          pillar_1.4.2      
 ##  [82] foreign_0.8-71     withr_2.1.2        units_0.6-5       
-##  [85] shapefiles_0.7     sp_1.3-1           tibble_2.1.3      
+##  [85] shapefiles_0.7     sp_1.3-2           tibble_2.1.3      
 ##  [88] crayon_1.3.4       CARBayesST_3.0.1   KernSmooth_2.23-15
 ##  [91] rmarkdown_1.14     usethis_1.5.1      grid_3.6.1        
 ##  [94] data.table_1.12.6  callr_3.3.2        matrixcalc_1.0-3  

@@ -4,19 +4,23 @@
 \alias{fitLocfit}
 \title{a function to model curve of a dataset using a local regression}
 \usage{
-fitLocfit(datain, trait, myylim, tt, reference)
+fitLocfit(datain, trait, xtime, myylim, tt, reference, myxlab)
 }
 \arguments{
 \item{datain}{input dataframe}
 
 \item{trait}{character, trait of interest to model (example biovolume, PH ...)}
 
+\item{xtime}{character, name of the thermal time column in the input dataset (example thermaltime)}
+
 \item{myylim}{numeric, max value of y-axis , varies according to trait}
 
 \item{tt}{numeric vector of thermal times at which predictions are recovered}
 
-\item{reference}{character, a column name indicating an unique identifiant of plant
+\item{reference}{character, a column name indicating an unique identifiant of plant in the input dataset
 (example: Ref == concatenation of experimentAlias-Line-Position-scenario)}
+
+\item{myxlab}{character, a x label for the output graphics}
 }
 \value{
 a dataframe of the predictions at tt thermal times for each plant of the input data set
@@ -28,13 +32,15 @@ on biovolume, plant height or leaf area trait and extracts predictions at specif
 times
 }
 \details{
-the input dataset must contain thermalTime column
+the input dataset must contain a thermalTime column (numeric data) and a Ref column (unique id)
 }
 \examples{
 \donttest{
 # Take a while...
  myThermalTimes<-c(24,30)
- resu<-fitLocfit(datain=plant1,trait="biovolume",myylim=700,tt=myThermalTimes,reference="Ref")
+ resu<-fitLocfit(datain=plant1,trait="biovolume",xtime="thermalTime",
+                 myylim=700,tt=myThermalTimes,reference="Ref",
+                 myxlab="Thermal Time degD")
  str(resu)
 }
 }

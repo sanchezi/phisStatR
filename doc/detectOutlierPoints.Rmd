@@ -19,7 +19,7 @@ Objective: a vignette for phisStatR library
            require phisStatR library and flagPointLocfit() function
            The user has to adapt to his own analysis.
 Creation : 13/04/2018
-Update   : 18/10/2019
+Update   : 14/11/2019
 -->
 
 ***

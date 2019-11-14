@@ -1,35 +1,35 @@
-## ----echo=TRUE,message=FALSE, warning=FALSE,error=FALSE------------------
+## ----echo=TRUE,message=FALSE, warning=FALSE,error=FALSE-----------------------
   library(dplyr)
   library(tidyr)
   library(phisStatR)
   library(ggplot2)
 
-## ----echo=TRUE,message=FALSE, warning=FALSE,error=FALSE------------------
+## ----echo=TRUE,message=FALSE, warning=FALSE,error=FALSE-----------------------
   mydata<-plant4
   str(mydata)
 
-## ----spatmodel1,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE-------
+## ----spatmodel1,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE------------
   spat.biomass<-fitSpATS(datain=mydata,trait="Biomass24",genotypeId="genotypeAlias",rowId="Line",colId="Position",
                  typeModel="anova",genotype.as.random=FALSE,nseg=c(14,30),verbose)
 
-## ----spatplot1,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE--------
+## ----spatplot1,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE-------------
   plot(spat.biomass)
 
-## ----spatmodel2,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE-------
+## ----spatmodel2,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE------------
   spat.ph<-fitSpATS(datain=mydata,trait="PH24",genotypeId="genotypeAlias",rowId="Line",colId="Position",
                  typeModel="anova",genotype.as.random=FALSE,nseg=c(14,30),verbose)
 
-## ----spatplot2,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE--------
+## ----spatplot2,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE-------------
   plot(spat.ph)
 
-## ----spatmodel3,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE-------
+## ----spatmodel3,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE------------
   spat.phy<-fitSpATS(datain=mydata,trait="Phy",genotypeId="genotypeAlias",rowId="Line",colId="Position",
                  typeModel="anova",genotype.as.random=FALSE,nseg=c(14,30),verbose)
 
-## ----spatplot3,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE--------
+## ----spatplot3,echo=TRUE,message=FALSE, warning=FALSE,error=FALSE-------------
   plot(spat.phy)
 
-## ----proc,echo=TRUE,message=FALSE, warning=FALSE-------------------------
+## ----proc,echo=TRUE,message=FALSE, warning=FALSE------------------------------
   # concatenate raw data and residuals calculated with the SpATS model
   devResBio<-spat.biomass$residuals
   devResPH<-spat.ph$residuals
@@ -100,10 +100,10 @@
                   )
   
 
-## ----export,echo=TRUE,eval=FALSE,message=FALSE, warning=FALSE------------
+## ----export,echo=TRUE,eval=FALSE,message=FALSE, warning=FALSE-----------------
 #    write.table(myglobal,"OutputFile_detectOutlierCurves_SpATS.csv",row.names=FALSE,sep="\t")
 
-## ----listing1,echo=TRUE,message=FALSE, warning=FALSE---------------------
+## ----listing1,echo=TRUE,message=FALSE, warning=FALSE--------------------------
   cat("Lower raw outlier:")
   myglobal %>% select(Ref,genotypeAlias,repetition,Biomass24,PH24,Phy,flagLowerRawSpats) %>%
                 filter(flagLowerRawSpats !=1)
@@ -112,7 +112,7 @@
   myglobal %>% select(Ref,genotypeAlias,repetition,Biomass24,PH24,Phy,flagUpperRawSpats) %>%
                 filter(flagUpperRawSpats !=1)
 
-## ----listing2,echo=TRUE,message=FALSE, warning=FALSE---------------------
+## ----listing2,echo=TRUE,message=FALSE, warning=FALSE--------------------------
   cat("Lower quantile outlier:")
   myglobal %>% select(Ref,genotypeAlias,repetition,Biomass24,PH24,Phy,flagLowerCiSpats) %>%
                 filter(flagLowerCiSpats !=1)
@@ -122,7 +122,7 @@
                 filter(flagUpperCiSpats !=1)
     
 
-## ----dm,echo=TRUE,message=FALSE, warning=FALSE---------------------------
+## ----dm,echo=TRUE,message=FALSE, warning=FALSE--------------------------------
   outlierId<-filter(myglobal,flagLowerRawSpats !=1 | flagUpperRawSpats !=1)  %>% 
              select(genotypeAlias,scenario,repetition,flagLowerRawSpats,flagUpperRawSpats) %>%
              unite("geno_sce",genotypeAlias,scenario,sep="_",remove=FALSE)
@@ -154,6 +154,6 @@
     geom_point(aes(shape=flag,color=as.factor(repetition))) + scale_shape_manual(values = c(0,19,2)) +
     facet_wrap(~geno_sce) 
 
-## ----session,echo=FALSE,message=FALSE, warning=FALSE---------------------
+## ----session,echo=FALSE,message=FALSE, warning=FALSE--------------------------
   sessionInfo()
 

@@ -3,7 +3,7 @@
 # Objective: graphical functions for phenoarch experiment data analysis
 # Author: I.Sanchez
 # Creation: 27/07/2016
-# Update: 29/10/2019
+# Update: 14/11/2019
 #------------------------------------------------------------------
 
 #' @title a function for representing a trait in the phenoarch greenhouse

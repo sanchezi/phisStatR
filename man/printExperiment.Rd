@@ -4,12 +4,10 @@
 \alias{printExperiment}
 \title{a function for experiment description}
 \usage{
-printExperiment(datain, manip)
+printExperiment(datain)
 }
 \arguments{
-\item{datain}{a dataframe to describe}
-
-\item{manip}{an identifiant of an experiment (example ZA16)}
+\item{datain}{a dataframe to describe containing a unique experiment}
 }
 \value{
 a description
@@ -19,11 +17,10 @@ a function for experiment description
 }
 \details{
 the input dataframe must contain the following columns: experimentAlias,
-genotypeAlias, scenario, Repsce and Ref
+Genotype, scenario, coordinates and pot.
 }
 \examples{
 \donttest{
-# Not run
- printExperiment(datain=toto,manip="ZB12")
+  printExperiment(datain=plant3)
 }
 }

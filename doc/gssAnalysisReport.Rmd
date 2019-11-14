@@ -52,6 +52,12 @@ The five first column names are standard names extracted from the web service.
   myreport<-substr(now(),1,10)
 ```
 
+```{r oneprint,echo=TRUE,message=FALSE, warning=FALSE}
+  data(plant3)
+  cat("-------------- plant3 dataset ---------------\n")  
+  printExperiment(datain=plant3)
+```
+
 ```{r,echo=TRUE,message=FALSE, warning=FALSE}
   # Import data, here is a dataset in the phisStatR package, You have to import your own dataset
   # using a read.table() statement or a request to the web service
@@ -65,11 +71,6 @@ The five first column names are standard names extracted from the web service.
   mydata<-unite(plant3,Genosce,experimentAlias,genotypeAlias,scenario,sep="-",remove=FALSE)
   mydata<-arrange(mydata,Genosce)
   
-```
-
-```{r oneprint,echo=FALSE,message=FALSE, warning=FALSE}
-  cat("-------------- plant3 dataset ---------------\n")  
-  printExperiment(datain=mydata,manip="manip3")
 ```
 
 ```{r algo,echo=TRUE,message=FALSE, warning=FALSE}

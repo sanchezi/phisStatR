@@ -1,4 +1,4 @@
-## ----echo=TRUE,message=FALSE, warning=FALSE------------------------------
+## ----echo=TRUE,message=FALSE, warning=FALSE-----------------------------------
   library(ggplot2)
   library(lubridate)
   library(tidyr)
@@ -8,7 +8,12 @@
 
   myreport<-substr(now(),1,10)
 
-## ----echo=TRUE,message=FALSE, warning=FALSE------------------------------
+## ----oneprint,echo=TRUE,message=FALSE, warning=FALSE--------------------------
+  data(plant3)
+  cat("-------------- plant3 dataset ---------------\n")  
+  printExperiment(datain=plant3)
+
+## ----echo=TRUE,message=FALSE, warning=FALSE-----------------------------------
   # Import data, here is a dataset in the phisStatR package, You have to import your own dataset
   # using a read.table() statement or a request to the web service
   # You can add some datamanagement statements...
@@ -22,15 +27,11 @@
   mydata<-arrange(mydata,Genosce)
   
 
-## ----oneprint,echo=FALSE,message=FALSE, warning=FALSE--------------------
-  cat("-------------- plant3 dataset ---------------\n")  
-  printExperiment(datain=mydata,manip="manip3")
-
-## ----algo,echo=TRUE,message=FALSE, warning=FALSE-------------------------
+## ----algo,echo=TRUE,message=FALSE, warning=FALSE------------------------------
   # For one parameter, for example biovolume
   resbio<-fitGSS(datain=mydata,trait="biovolume",loopId="Genosce") 
 
-## ----echo=TRUE,message=FALSE, warning=FALSE------------------------------
+## ----echo=TRUE,message=FALSE, warning=FALSE-----------------------------------
   outlierbio<-printGSS(object=resbio[[2]],threshold = 0.05)
   klbio<-printGSS(object=resbio[[2]],threshold = NULL)
   
@@ -54,6 +55,6 @@
   }
 
 
-## ----session,echo=FALSE,message=FALSE, warning=FALSE---------------------
+## ----session,echo=FALSE,message=FALSE, warning=FALSE--------------------------
   sessionInfo()
 
