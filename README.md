@@ -12,6 +12,13 @@ multi-criteria basis, regardless of the quality of measurements. see vignette _d
 
 __Package In progress...__
 
+The functions of the package are constructed according to a data set structure of a lattice experiment (spatial coordinates) and for some with temporal informations. Please have a look to the structure of the example datasets provided by the package (plant1, plant2, plant3 and plant4). Mostly, the following columns are required:
+
+* the Line and Position columns (coordinates in a greenhouse)
+* Ref: a unique identifiant
+* genotypeAlias: genotypes used in the experiment
+* scenario: scenario applied to the experiment
+
 # Installation
 
 To install the **phisStatR** package, the easiest is to install it directly from GitHub. Open an R session and run the following commands:
