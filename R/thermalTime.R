@@ -3,7 +3,7 @@
 # Objective: calculation of thermal time according to several methods
 # Author: I.Sanchez
 # Creation: 12/12/2016
-# Update  : 28/10/2019
+# Update  : 14/11/2019
 #-------------------------------------------------------------------------------
 
 ##' a function to calculate thermal time
@@ -32,21 +32,18 @@
 ##' \donttest{
 ##' # Example for the model of Parent 2010
 ##' library(phisWSClientR)
-##' # initializeClientConnection and getEnvironment are functions of the phisWSClientR library
-##' initializeClientConnection(apiID="ws_public")
-##' token <- getToken("guestphis@supagro.inra.fr","guestphis",verbose=FALSE)
-##' tpCount<-getEnvironment(token = token$data ,
-##'               experimentURI="http://www.phenome-fppn.fr/m3p/ARCH2012-01-01",
+##' # connectToPHISWS and getEnvironment are functions of the phisWSClientR library
+##' connectToPHISWS(apiID="ws_1_public", username = "guestphis@supagro.inra.fr",
+##'                 password = "guestphis")
+##' tpCount<-getEnvironment(experimentURI="http://www.phenome-fppn.fr/m3p/ARCH2017-03-30",
+##'               facility="http://www.phenome-fppn.fr/m3p/es2",
+##'               variables="leaf temperature_thermocouple sensor_degree celsius")$totalCount
+##' myMeteo<-getEnvironment(experimentURI="http://www.phenome-fppn.fr/m3p/ARCH2017-03-30",
 ##'               facility="http://www.phenome-fppn.fr/m3p/es2",
 ##'               variables="leaf temperature_thermocouple sensor_degree celsius",
-##'               verbose=FALSE)$totalCount
-##' myMeteo<-getEnvironment(token = token$data,
-##'               experimentURI="http://www.phenome-fppn.fr/m3p/ARCH2012-01-01",
-##'               facility="http://www.phenome-fppn.fr/m3p/es2",
-##'               variables="leaf temperature_thermocouple sensor_degree celsius",
-##'               pageSize=tpCount,verbose=FALSE)$data
-##' test<-thermalTime(datain=myMeteo,inSpecie="maize",method="parent",inDateS="2012-01-10",
-##'                   inDateE="2012-03-10",inTemp=NULL)
+##'               pageSize=tpCount)$data
+##' test<-thermalTime(datain=myMeteo,inSpecie="maize",method="parent",inDateS="2017-04-02",
+##'                   inDateE="2017-06-15",inTemp=NULL)
 ##' }
 ##' @export
 thermalTime<-function(datain,inSpecie,method,inDateS=NULL,inDateE=NULL,inTemp=NULL){
