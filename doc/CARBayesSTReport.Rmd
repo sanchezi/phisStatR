@@ -21,13 +21,23 @@ Objective: a vignette for phisStatR library
            require phisStatR library and fitCARBayesST() function
            The user has to adapt to his own analysis.
 Creation : 21/06/2017
-Update   : 18/10/2019
+Update   : 14/11/2019
 -->
 
 ***
 # Objective 
 
 Detection of outliers in time courses of an experiment in PhenoArch greenhouse. In this vignette, we use a toy data set of the *phisStatR* library (anonymized real data set). 
+
+<div style="background-color:rgba(0, 255, 0,0.1); text-align:left; vertical-align: center; padding:10px 0;">
+Please, have a look on the names of the columns of the input data set. The function is not generic and needs specific columns names in the input data set:
+
+* Line: the x-coordinate in the lattice (numeric)
+* Position: the y-coordinate in the lattice (numeric)
+* Ref: a unique identifiant by pot, repetition and alias
+* scenario: the scenario applied to the experiment
+* genotypeAlias: the used genotypes in the experiment
+</div>
 
 The example is conducted on plantHeight parameter, we modelise the plantHeight taking into account the temporality (thermal time) and the spatiality (lattice structure) with a bayesian spatio-temporal ANOVA model [3].
 

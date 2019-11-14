@@ -4,7 +4,7 @@
 #            require CARBayesST package
 # Author: I.Sanchez
 # Creation: 20/06/2017
-# Update: 22/03/2018
+# Update: 14/11/2019
 #-------------------------------------------------------------------------------
 
 #' fitCARBayesST
@@ -20,7 +20,9 @@
 #' @param formulaModel A formula for the covariate part of the model using the syntax of the lm() function. see  \code{\link[=ST.CARanova]{ST.CARanova}} help
 #' @param typeModel character, choice of the model, \code{anova}, \code{linear} or \code{ar}
 #' @param verbose logical FALSE by default, if TRUE display information about the progress
-#' @details the input dataset must contain Position,Line,Ref,scenario,genotypeAlias columns
+#' @details the input dataset must contain Position,Line,Ref,scenario,genotypeAlias columns. The function is not generic and needs 
+#'          specific columns names in the input data set. Please have a look of the struture of the data set used in the example.
+#' 
 #' @seealso \code{\link[=CARBayesST]{CARBayesST}}, \code{\link[=ST.CARanova]{ST.CARanova}} and \code{\link[=spdep]{spdep}}
 #' @importFrom dplyr arrange_ distinct_ distinct filter_ full_join group_by_ summarise_
 #' @importFrom spdep knearneigh knn2nb dnearneigh make.sym.nb nb2listw nb2mat nbdists
@@ -32,6 +34,7 @@
 #'  library(phisStatR)
 #'  mydata<-plant1
 #'  mydata<-filter(mydata,!is.na(mydata$thermalTime))
+#'  str(mydata)
 #'  test<-fitCARBayesST(datain=mydata,xvar="thermalTime",trait="plantHeight",k=2,
 #'      graphDist=TRUE,burnin=10,n.sample=110,
 #'      formulaModel=as.formula(plantHeight~scenario+genotypeAlias),

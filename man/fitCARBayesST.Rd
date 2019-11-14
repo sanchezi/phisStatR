@@ -35,13 +35,15 @@ a list with a spatio-temporal object (CARBayesST) and a dataframe of the formate
 a function to model curves using a spatio-temporal bayesian modelling using \code{\link[=CARBayesST]{CARBayesST}} library
 }
 \details{
-the input dataset must contain Position,Line,Ref,scenario,genotypeAlias columns
+the input dataset must contain Position,Line,Ref,scenario,genotypeAlias columns. The function is not generic and needs 
+         specific columns names in the input data set. Please have a look of the struture of the data set used in the example.
 }
 \examples{
 \donttest{
  library(phisStatR)
  mydata<-plant1
  mydata<-filter(mydata,!is.na(mydata$thermalTime))
+ str(mydata)
  test<-fitCARBayesST(datain=mydata,xvar="thermalTime",trait="plantHeight",k=2,
      graphDist=TRUE,burnin=10,n.sample=110,
      formulaModel=as.formula(plantHeight~scenario+genotypeAlias),
